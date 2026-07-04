@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Hero — Tecnologia assistiva para crianças com TEA</title>
+<meta name="description" content="Aplicativo que transforma rotinas diárias em dados clínicos para crianças com Transtorno do Espectro Autista. Gamificação baseada em evidências científicas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #2D3A3A;
+  line-height: 1.6;
+  background: #FAFCFC;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Variables ── */
+:root {
+  --accent: #028090;
+  --accent-dark: #016670;
+  --highlight: #02C39A;
+  --highlight-light: #E6FAF4;
+  --text-dark: #2D3A3A;
+  --text-mid: #4A5C5C;
+  --text-light: #6B8080;
+  --bg-white: #FFFFFF;
+  --bg-off: #F5F9F9;
+  --bg-dark: #1A2C2C;
+  --border: #D6E4E4;
+  --max-w: 1120px;
+  --radius: 12px;
+}
+
+/* ── Typography ── */
+h1, h2, h3, h4 { color: var(--text-dark); line-height: 1.2; }
+h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 700; letter-spacing: -0.02em; }
+h3 { font-size: 1.25rem; font-weight: 600; }
+p { color: var(--text-mid); }
+
+/* ── Layout ── */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+section { padding: 96px 0; }
+.section-label {
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 12px;
+}
+.section-title { margin-bottom: 20px; }
+.section-subtitle { font-size: 1.1rem; max-width: 640px; margin-bottom: 48px; }
+
+/* ── Buttons ── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 1rem;
+  text-decoration: none; transition: all 0.2s; border: none; cursor: pointer;
+  font-family: inherit;
+}
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(2,128,144,0.3); }
+.btn-outline { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+.btn-outline:hover { background: var(--accent); color: white; }
+.btn-light { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+.btn-light:hover { background: rgba(255,255,255,0.25); }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border); transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+.nav-inner {
+  max-width: var(--max-w); margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between; height: 64px;
+}
+.nav-logo {
+  font-size: 1.3rem; font-weight: 800; color: var(--accent); text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-logo span { color: var(--highlight); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--text-mid); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--accent); }
+.nav-cta { display: flex; align-items: center; }
+.nav-cta .btn { padding: 10px 24px; font-size: 0.9rem; }
+.mobile-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+.mobile-toggle svg { width: 24px; height: 24px; stroke: var(--text-dark); }
+
+/* ── Hero ── */
+.hero {
+  padding: 160px 0 100px; position: relative; overflow: hidden;
+  background: linear-gradient(165deg, #F0FAFA 0%, #FAFCFC 50%, #F5FFF9 100%);
+}
+.hero::before {
+  content: ''; position: absolute; top: -200px; right: -200px;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(2,195,154,0.08) 0%, transparent 70%);
+}
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--highlight-light); border: 1px solid rgba(2,195,154,0.2);
+  border-radius: 50px; padding: 6px 16px; font-size: 0.8rem; font-weight: 600;
+  color: var(--accent-dark); margin-bottom: 24px;
+}
+.hero-eyebrow svg { width: 14px; height: 14px; }
+.hero h1 { margin-bottom: 20px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero-desc { font-size: 1.15rem; line-height: 1.7; margin-bottom: 32px; max-width: 520px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
+.hero-proof {
+  display: flex; gap: 40px; padding-top: 24px; border-top: 1px solid var(--border);
+}
+.hero-proof-item { text-align: left; }
+.hero-proof-item strong { display: block; font-size: 1.5rem; color: var(--accent); font-weight: 800; }
+.hero-proof-item span { font-size: 0.8rem; color: var(--text-light); }
+
+/* Hero visual */
+.hero-visual { position: relative; }
+.hero-card {
+  background: white; border-radius: 20px; padding: 32px;
+  box-shadow: 0 20px 60px rgba(2,128,144,0.1), 0 1px 3px rgba(0,0,0,0.04);
+  border: 1px solid rgba(2,128,144,0.08);
+}
+.hero-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.hero-card-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--highlight) 0%, var(--accent) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 1.1rem;
+}
+.hero-card-name { font-weight: 600; font-size: 0.95rem; }
+.hero-card-age { font-size: 0.8rem; color: var(--text-light); }
+.hero-card-progress { margin-bottom: 20px; }
+.hero-card-progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; }
+.hero-card-progress-label span:first-child { color: var(--text-mid); font-weight: 500; }
+.hero-card-progress-label span:last-child { color: var(--highlight); font-weight: 700; }
+.progress-bar { height: 8px; background: #E8F0F0; border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--highlight)); }
+.hero-card-tasks { list-style: none; }
+.hero-card-tasks li {
+  display: flex; align-items: center; gap: 10px; padding: 10px 0;
+  font-size: 0.9rem; color: var(--text-mid); border-bottom: 1px solid #F0F4F4;
+}
+.hero-card-tasks li:last-child { border-bottom: none; }
+.task-check {
+  width: 22px; height: 22px; border-radius: 6px; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+}
+.task-check.done { background: var(--highlight); }
+.task-check.done svg { stroke: white; width: 14px; height: 14px; }
+.task-check.pending { border: 2px solid var(--border); background: white; }
+.task-emoji { font-size: 1.1rem; }
+
+.hero-float-badge {
+  position: absolute; background: white; border-radius: 12px; padding: 12px 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08); font-size: 0.8rem; font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.hero-float-badge.top { top: -16px; right: -16px; color: var(--accent); }
+.hero-float-badge.bottom { bottom: -16px; left: -16px; color: var(--highlight); }
+
+/* ── Problem ── */
+.problem { background: var(--bg-dark); color: white; }
+.problem h2 { color: white; }
+.problem p { color: rgba(255,255,255,0.7); }
+.problem .section-label { color: var(--highlight); }
+.problem-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 48px; }
+.problem-stat {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius); padding: 28px 20px; text-align: center;
+}
+.problem-stat-number { font-size: 2.2rem; font-weight: 800; color: var(--highlight); margin-bottom: 4px; }
+.problem-stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+.problem-quote {
+  background: rgba(2,195,154,0.08); border-left: 3px solid var(--highlight);
+  border-radius: 0 var(--radius) var(--radius) 0; padding: 24px 28px;
+  max-width: 680px;
+}
+.problem-quote p { color: rgba(255,255,255,0.85); font-size: 1.1rem; font-style: italic; font-weight: 500; }
+.problem-quote cite { display: block; margin-top: 8px; font-size: 0.85rem; color: var(--highlight); font-style: normal; }
+
+/* ── Solution ── */
+.solution-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.solution-card {
+  background: white; border-radius: var(--radius); padding: 32px; border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.solution-card:hover { border-color: var(--accent); box-shadow: 0 8px 30px rgba(2,128,144,0.08); transform: translateY(-2px); }
+.solution-icon {
+  width: 52px; height: 52px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 20px;
+}
+.solution-icon.child { background: #FFF3E6; }
+.solution-icon.family { background: #E6F0FF; }
+.solution-icon.pro { background: var(--highlight-light); }
+.solution-card h3 { margin-bottom: 12px; }
+.solution-card p { font-size: 0.95rem; line-height: 1.6; }
+.solution-features { list-style: none; margin-top: 16px; }
+.solution-features li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.9rem; color: var(--text-mid); padding: 4px 0;
+}
+.solution-features li::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--highlight); flex-shrink: 0; margin-top: 7px;
+}
+
+/* ── Pillars ── */
+.pillars { background: var(--bg-off); }
+.pillars-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; }
+.pillar {
+  background: white; border-radius: var(--radius); padding: 28px 20px;
+  text-align: center; border: 1px solid var(--border); position: relative;
+}
+.pillar-number {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent); color: white; font-size: 0.8rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.pillar-icon { font-size: 2rem; margin: 12px 0 16px; }
+.pillar h3 { font-size: 1rem; margin-bottom: 8px; }
+.pillar p { font-size: 0.82rem; line-height: 1.5; color: var(--text-light); }
+.pillar-connector {
+  display: none;
+  /* arrows between pillars on desktop */
+}
+
+/* ── Science ── */
+.science-content { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.science-list { list-style: none; }
+.science-list li {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 0; border-bottom: 1px solid var(--border);
+}
+.science-list li:last-child { border-bottom: none; }
+.science-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 6px;
+}
+.science-list strong { display: block; font-size: 0.95rem; color: var(--text-dark); margin-bottom: 2px; }
+.science-list span { font-size: 0.85rem; color: var(--text-light); }
+.science-note {
+  background: var(--bg-off); border-radius: var(--radius); padding: 28px;
+  border: 1px solid var(--border);
+}
+.science-note h3 { margin-bottom: 16px; color: var(--accent); }
+.science-note p { font-size: 0.95rem; line-height: 1.7; }
+
+/* ── Validation ── */
+.validation { background: var(--bg-off); }
+.validation-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+.validation-card {
+  background: white; border-radius: var(--radius); padding: 32px;
+  text-align: center; border: 1px solid var(--border);
+}
+.validation-number { font-size: 2.8rem; font-weight: 800; color: var(--accent); }
+.validation-unit { font-size: 1.1rem; color: var(--highlight); font-weight: 600; }
+.validation-label { font-size: 0.9rem; color: var(--text-light); margin-top: 4px; }
+.validation-source {
+  text-align: center; font-size: 0.85rem; color: var(--text-light);
+  font-style: italic;
+}
+
+/* ── Pricing ── */
+.pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.pricing-card {
+  background: white; border-radius: var(--radius); padding: 28px 24px;
+  border: 1px solid var(--border); text-align: center; transition: all 0.3s;
+  position: relative;
+}
+.pricing-card.featured { border-color: var(--accent); box-shadow: 0 8px 30px rgba(2,128,144,0.12); }
+.pricing-card.featured::before {
+  content: 'Mais popular'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: white; font-size: 0.7rem; font-weight: 700;
+  padding: 4px 16px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.pricing-plan { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+.pricing-price { font-size: 2rem; font-weight: 800; color: var(--accent); margin: 12px 0 4px; }
+.pricing-price span { font-size: 0.9rem; font-weight: 500; color: var(--text-light); }
+.pricing-desc { font-size: 0.82rem; color: var(--text-light); margin-bottom: 20px; min-height: 36px; }
+.pricing-features { list-style: none; text-align: left; margin-bottom: 24px; }
+.pricing-features li {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.85rem; color: var(--text-mid); padding: 6px 0;
+}
+.pricing-features li svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; stroke: var(--highlight); }
+.pricing-card .btn { width: 100%; justify-content: center; padding: 12px; font-size: 0.9rem; }
+
+/* ── About ── */
+.about { background: var(--bg-dark); color: white; }
+.about h2 { color: white; }
+.about p { color: rgba(255,255,255,0.7); }
+.about .section-label { color: var(--highlight); }
+.about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.about-text p { font-size: 1.05rem; line-height: 1.8; margin-bottom: 16px; }
+.about-badges { display: flex; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
+.about-badge {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 14px 20px; display: flex; align-items: center; gap: 10px;
+}
+.about-badge-icon { font-size: 1.4rem; }
+.about-badge-text { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+.about-badge-text strong { display: block; color: white; font-size: 0.9rem; }
+.about-quote-block {
+  background: rgba(2,195,154,0.08); border-radius: var(--radius); padding: 36px;
+  border: 1px solid rgba(2,195,154,0.15);
+}
+.about-quote-block blockquote {
+  font-size: 1.2rem; font-weight: 500; color: white; line-height: 1.6;
+  font-style: italic; margin-bottom: 16px;
+}
+.about-quote-block cite {
+  font-size: 0.85rem; color: var(--highlight); font-style: normal; font-weight: 600;
+}
+
+/* ── LGPD ── */
+.lgpd { background: var(--bg-off); padding: 64px 0; }
+.lgpd-inner {
+  display: flex; align-items: center; gap: 24px;
+  background: white; border-radius: var(--radius); padding: 28px 32px;
+  border: 1px solid var(--border);
+}
+.lgpd-icon { font-size: 2rem; flex-shrink: 0; }
+.lgpd-text h3 { margin-bottom: 4px; font-size: 1rem; }
+.lgpd-text p { font-size: 0.9rem; color: var(--text-light); }
+
+/* ── CTA ── */
+.cta {
+  padding: 80px 0; text-align: center;
+  background: linear-gradient(135deg, var(--accent) 0%, #016670 100%);
+  color: white;
+}
+.cta h2 { color: white; margin-bottom: 16px; }
+.cta p { color: rgba(255,255,255,0.8); font-size: 1.1rem; margin-bottom: 32px; }
+.cta .btn-light { font-size: 1.05rem; padding: 16px 36px; }
+
+/* ── Footer ── */
+footer {
+  background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 48px 0 32px; color: rgba(255,255,255,0.5); font-size: 0.85rem;
+}
+.footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-links { display: flex; gap: 24px; list-style: none; }
+.footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--highlight); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-visual { max-width: 420px; margin: 0 auto; }
+  .problem-grid { grid-template-columns: repeat(2, 1fr); }
+  .pillars-grid { grid-template-columns: repeat(3, 1fr); }
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-content { grid-template-columns: 1fr; }
+  .science-content { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  section { padding: 64px 0; }
+  .nav-links { display: none; }
+  .mobile-toggle { display: block; }
+  .hero { padding: 120px 0 64px; }
+  .hero-proof { gap: 24px; flex-wrap: wrap; }
+  .solution-grid { grid-template-columns: 1fr; }
+  .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+  .problem-grid { grid-template-columns: 1fr; }
+  .validation-grid { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; max-width: 380px; margin-left: auto; margin-right: auto; }
+  .hero-float-badge { display: none; }
+  .footer-inner { flex-direction: column; text-align: center; }
+}
+@media (max-width: 480px) {
+  .pillars-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="13" stroke="#028090" stroke-width="2"/><path d="M9 14.5l3 3 7-7" stroke="#02C39A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Daily<span>Hero</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#problema">O Problema</a></li>
+      <li><a href="#solucao">Solucao</a></li>
+      <li><a href="#ciencia">Ciencia</a></li>
+      <li><a href="#planos">Planos</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#waitlist" class="btn btn-primary">Lista de espera</a>
+    </div>
+    <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#028090" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#02C39A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Tecnologia assistiva baseada em evidencias
+        </div>
+        <h1>As <em>160 horas invisiveis</em> entre as sessoes de terapia</h1>
+        <p class="hero-desc">
+          Daily Hero transforma rotinas diarias de criancas com TEA Nivel 1 em dados clinicos acionaveis.
+          O profissional planeja com base em evidencia. A familia participa com clareza. A crianca joga.
+        </p>
+        <div class="hero-actions">
+          <a href="#waitlist" class="btn btn-primary">
+            Entrar na lista de espera
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10m-4-4l4 4-4 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#solucao" class="btn btn-outline">Como funciona</a>
+        </div>
+        <div class="hero-proof">
+          <div class="hero-proof-item">
+            <strong>4.7/5</strong>
+            <span>Avaliacao profissional</span>
+          </div>
+          <div class="hero-proof-item">
+            <strong>100%</strong>
+            <span>Recomendariam</span>
+          </div>
+          <div class="hero-proof-item">
+            <strong>~60</strong>
+            <span>Criancas na validacao</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero visual: simulated app card -->
+      <div class="hero-visual">
+        <div class="hero-float-badge top">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1l2 4h4l-3 3 1 5-4-2-4 2 1-5-3-3h4z" fill="#02C39A"/></svg>
+          +3 conquistas hoje
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-header">
+            <div class="hero-card-avatar">L</div>
+            <div>
+              <div class="hero-card-name">Lucas</div>
+              <div class="hero-card-age">6 anos &middot; TEA Nivel 1</div>
+            </div>
+          </div>
+          <div class="hero-card-progress">
+            <div class="hero-card-progress-label">
+              <span>Rotina de hoje</span>
+              <span>75%</span>
+            </div>
+            <div class="progress-bar"><div class="progress-fill" style="width: 75%"></div></div>
+          </div>
+          <ul class="hero-card-tasks">
+            <li>
+              <div class="task-check done"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-emoji">🪥</span> Escovou os dentes
+            </li>
+            <li>
+              <div class="task-check done"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-emoji">👕</span> Vestiu a roupa
+            </li>
+            <li>
+              <div class="task-check done"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-emoji">🍎</span> Tomou cafe da manha
+            </li>
+            <li>
+              <div class="task-check pending"></div>
+              <span class="task-emoji">📚</span> Organizou a mochila
+            </li>
+          </ul>
+        </div>
+        <div class="hero-float-badge bottom">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 8A6 6 0 112 8a6 6 0 0112 0z" stroke="#02C39A" stroke-width="1.5"/><path d="M8 5v3l2 1" stroke="#02C39A" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Dados em tempo real
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PROBLEM ══════════════ -->
+<section class="problem" id="problema">
+  <div class="container">
+    <div class="section-label">O problema</div>
+    <h2 class="section-title">Uma crianca com TEA tem em media 2h de terapia por semana.<br>E as outras 160 horas?</h2>
+    <p class="section-subtitle" style="margin-bottom:48px">As familias registram comportamentos em cadernos. Os profissionais planejam sem dados objetivos. Os ganhos da terapia se perdem na rotina.</p>
+
+    <div class="problem-grid">
+      <div class="problem-stat">
+        <div class="problem-stat-number">2,4M</div>
+        <div class="problem-stat-label">Pessoas com TEA no Brasil (IBGE, 2022)</div>
+      </div>
+      <div class="problem-stat">
+        <div class="problem-stat-number">92,4%</div>
+        <div class="problem-stat-label">Dos cuidadores sao mulheres (MAB, 2026)</div>
+      </div>
+      <div class="problem-stat">
+        <div class="problem-stat-number">30,5%</div>
+        <div class="problem-stat-label">Sem renda ou desempregados — dedicacao integral ao filho</div>
+      </div>
+      <div class="problem-stat">
+        <div class="problem-stat-number">34,3%</div>
+        <div class="problem-stat-label">Sem nenhum apoio de terceiros (MAB, 2026)</div>
+      </div>
+    </div>
+
+    <div class="problem-quote">
+      <p>"O profissional planeja no escuro. A familia registra em cadernos. A crianca repete exercicios sem contexto. Ninguem ve o quadro completo."</p>
+      <cite>Dados: Mapa Autismo Brasil, Instituto Autismos, abr. 2026 (23.632 entrevistas)</cite>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SOLUTION ══════════════ -->
+<section id="solucao">
+  <div class="container">
+    <div class="section-label">A solucao</div>
+    <h2 class="section-title">Tres perspectivas, uma plataforma</h2>
+    <p class="section-subtitle">Daily Hero conecta a experiencia da crianca, a participacao da familia e a analise do profissional num unico sistema.</p>
+
+    <div class="solution-grid">
+      <div class="solution-card">
+        <div class="solution-icon child">🎮</div>
+        <h3>Para a crianca</h3>
+        <p>Um jogo de rotinas para criancas com TEA Nivel 1 (53,7% dos diagnosticados). Cada tarefa completada vira uma conquista. Recompensas visuais e niveis adaptados ao ritmo individual.</p>
+        <ul class="solution-features">
+          <li>Rotinas gamificadas com reforco positivo</li>
+          <li>Avatares e colecao de conquistas</li>
+          <li>Dificuldade adaptativa por desempenho</li>
+          <li>Expansao planejada para Nivel 2</li>
+        </ul>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon family">👨‍👩‍👧</div>
+        <h3>Para a familia</h3>
+        <p>Painel simples com o progresso do dia. A familia sabe o que foi feito, o que falta e como ajudar — sem planilhas nem cadernos.</p>
+        <ul class="solution-features">
+          <li>Acompanhamento diario visual</li>
+          <li>Alertas de rotina e lembretes</li>
+          <li>Historico de evolucao semanal</li>
+          <li>Orientacoes contextuais do profissional</li>
+        </ul>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon pro">📊</div>
+        <h3>Para o profissional</h3>
+        <p>Painel clinico com dados comportamentais reais. Indices cognitivos, padroes de aderencia e evolucao longitudinal — gerados automaticamente.</p>
+        <ul class="solution-features">
+          <li>Indices: atencao, flexibilidade, autonomia</li>
+          <li>Dados objetivos entre sessoes</li>
+          <li>Graficos de evolucao por periodo</li>
+          <li>Exportacao para relatorio clinico</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ PILLARS ══════════════ -->
+<section class="pillars">
+  <div class="container">
+    <div class="section-label">Metodologia</div>
+    <h2 class="section-title">5 pilares do sistema</h2>
+    <p class="section-subtitle">Da captura do dado a devolutiva clinica, cada etapa e fundamentada em literatura cientifica.</p>
+
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-number">1</div>
+        <div class="pillar-icon">📡</div>
+        <h3>Captar</h3>
+        <p>Coleta passiva de dados comportamentais durante a rotina gamificada, sem sobrecarga para a familia.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">2</div>
+        <div class="pillar-icon">📏</div>
+        <h3>Medir</h3>
+        <p>Indices cognitivos calculados automaticamente: atencao seletiva, flexibilidade, tolerancia a frustacao.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">3</div>
+        <div class="pillar-icon">🔄</div>
+        <h3>Adaptar</h3>
+        <p>Dificuldade ajustada em tempo real conforme desempenho. Cada crianca tem seu proprio ritmo.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">4</div>
+        <div class="pillar-icon">⭐</div>
+        <h3>Incentivar</h3>
+        <p>Reforco positivo baseado em ABA. Recompensas calibradas, sem excesso de estimulo.</p>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">5</div>
+        <div class="pillar-icon">📋</div>
+        <h3>Devolver</h3>
+        <p>Dados transformados em relatorio clinico acionavel para profissionais e familias.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SCIENCE ══════════════ -->
+<section id="ciencia">
+  <div class="container">
+    <div class="section-label">Base cientifica</div>
+    <h2 class="section-title">Fundamentado em 7 frameworks clinicos</h2>
+    <p class="section-subtitle">Cada mecanica do jogo tem correspondencia direta com literatura revisada por pares.</p>
+
+    <div class="science-content">
+      <ul class="science-list">
+        <li>
+          <div class="science-dot"></div>
+          <div><strong>ABA (Analise do Comportamento Aplicada)</strong><span>Sistema de reforco e modelagem comportamental</span></div>
+        </li>
+        <li>
+          <div class="science-dot"></div>
+          <div><strong>TEACCH</strong><span>Estruturacao visual e previsibilidade de rotinas</span></div>
+        </li>
+        <li>
+          <div class="science-dot"></div>
+          <div><strong>Teoria Polivagal</strong><span>Regulacao emocional via Zones of Regulation</span></div>
+        </li>
+        <li>
+          <div class="science-dot"></div>
+          <div><strong>PECS</strong><span>Comunicacao visual integrada a interface</span></div>
+        </li>
+        <li>
+          <div class="science-dot"></div>
+          <div><strong>DIR/Floortime</strong><span>Engajamento emocional e desenvolvimento funcional</span></div>
+        </li>
+        <li>
+          <div class="science-dot"></div>
+          <div><strong>ESDM (Early Start Denver Model)</strong><span>Intervencao precoce naturalistica</span></div>
+        </li>
+        <li>
+          <div class="science-dot"></div>
+          <div><strong>Evidence-Centered Design</strong><span>Avaliacao cognitiva embutida na jogabilidade (stealth assessment)</span></div>
+        </li>
+      </ul>
+
+      <div class="science-note">
+        <h3>Precedente regulatorio</h3>
+        <p>
+          O EndeavorRx (Akili Interactive) foi o primeiro jogo aprovado pela FDA como tratamento digital
+          para TDAH em criancas (De Novo DEN200026, 2020). O Daily Hero segue principios semelhantes
+          de design baseado em evidencia, adaptados para TEA.
+        </p>
+        <p style="margin-top: 16px;">
+          A plataforma utiliza 21 referencias cientificas verificadas, cobrindo desde estudos clinicos
+          randomizados ate revisoes sistematicas publicadas em journals como JAMA e Pediatrics.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ VALIDATION ══════════════ -->
+<section class="validation">
+  <div class="container">
+    <div class="section-label">Validacao</div>
+    <h2 class="section-title">Dados da validacao com profissionais</h2>
+    <p class="section-subtitle">Quatro profissionais de saude avaliaram o conceito e o prototipo funcional do Daily Hero.</p>
+
+    <div class="validation-grid">
+      <div class="validation-card">
+        <div class="validation-number">100<span class="validation-unit">%</span></div>
+        <div class="validation-label">Recomendariam o app a colegas</div>
+      </div>
+      <div class="validation-card">
+        <div class="validation-number">4.7<span class="validation-unit">/5</span></div>
+        <div class="validation-label">Avaliacao media de utilidade clinica</div>
+      </div>
+      <div class="validation-card">
+        <div class="validation-number">~60</div>
+        <div class="validation-label">Criancas na base de atendimento dos avaliadores</div>
+      </div>
+    </div>
+
+    <p class="validation-source">
+      Pesquisa realizada com psicomotricista, fonoaudiologa, psicologa e psicologo (TCC),
+      com experiencia combinada de 18 anos em TEA. Colatina/ES e regiao.
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════ PRICING ══════════════ -->
+<section id="planos">
+  <div class="container">
+    <div class="section-label">Planos</div>
+    <h2 class="section-title">Acessivel para quem mais precisa</h2>
+    <p class="section-subtitle">O plano gratuito ja oferece valor. Os planos pagos desbloqueiam dados clinicos e painel profissional.</p>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-plan">Gratuito</div>
+        <div class="pricing-price">R$0</div>
+        <div class="pricing-desc">Rotinas basicas e acompanhamento simples</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Ate 3 rotinas</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Gamificacao basica</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> 1 perfil de crianca</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-outline">Comecar gratis</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-plan">Familia</div>
+        <div class="pricing-price">R$19,90<span>/mes</span></div>
+        <div class="pricing-desc">Rotinas completas e dados para a familia</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Rotinas ilimitadas</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Relatorios semanais</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Ate 3 perfis</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Suporte visual PECS</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-primary">Lista de espera</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-plan">Familia+</div>
+        <div class="pricing-price">R$29,90<span>/mes</span></div>
+        <div class="pricing-desc">Dados clinicos compartilhados com profissional</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Tudo do Familia</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Painel de indices cognitivos</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Compartilhamento com terapeuta</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> IA adaptativa avancada</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-outline">Lista de espera</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-plan">Profissional</div>
+        <div class="pricing-price">R$49,90<span>/mes</span></div>
+        <div class="pricing-desc">Painel clinico multi-paciente</div>
+        <ul class="pricing-features">
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Ate 30 pacientes</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Dashboard clinico completo</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Exportacao para relatorios</li>
+          <li><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Suporte prioritario</li>
+        </ul>
+        <a href="#waitlist" class="btn btn-outline">Lista de espera</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ ABOUT ══════════════ -->
+<section class="about" id="sobre">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <div class="section-label">Sobre o projeto</div>
+        <h2>Construido por um jovem de 17 anos. Orientado por evidencia.</h2>
+        <p>
+          Daily Hero e um projeto de Guilherme Pereira de Castro, selecionado entre mais de 600 inscritos
+          no programa Jovens Embaixadores ESPRO 2025, com aceleracao pela Fundacao Dom Cabral.
+        </p>
+        <p>
+          O projeto nasceu de uma pergunta: o que acontece com uma crianca com TEA nas 160 horas semanais
+          em que ela nao esta em terapia? A resposta e que ninguem mede. Daily Hero resolve isso.
+        </p>
+        <div class="about-badges">
+          <div class="about-badge">
+            <div class="about-badge-icon">🎓</div>
+            <div class="about-badge-text"><strong>ESPRO 2025</strong>Jovens Embaixadores</div>
+          </div>
+          <div class="about-badge">
+            <div class="about-badge-icon">🏛️</div>
+            <div class="about-badge-text"><strong>FDC</strong>Fundacao Dom Cabral</div>
+          </div>
+          <div class="about-badge">
+            <div class="about-badge-icon">🤖</div>
+            <div class="about-badge-text"><strong>Frontier Firm</strong>IA como 1a contratacao</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-quote-block">
+        <blockquote>
+          "O Daily Hero nao substitui o terapeuta. Ele da ao terapeuta os dados que faltavam
+          para fazer um trabalho melhor."
+        </blockquote>
+        <cite>— Guilherme Pereira de Castro, 17 anos</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ LGPD ══════════════ -->
+<section class="lgpd">
+  <div class="container">
+    <div class="lgpd-inner">
+      <div class="lgpd-icon">🔒</div>
+      <div class="lgpd-text">
+        <h3>Privacidade e protecao de dados</h3>
+        <p>
+          Daily Hero segue a LGPD (Lei Geral de Protecao de Dados). Todos os dados comportamentais sao
+          anonimizados. O uso por menores requer consentimento parental explicito. Nenhum dado e
+          compartilhado com terceiros sem autorizacao.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CTA ══════════════ -->
+<section class="cta" id="waitlist">
+  <div class="container">
+    <h2>Quer saber quando o Daily Hero estiver disponivel?</h2>
+    <p>Deixe seu e-mail e avisamos quando o app estiver pronto para download.</p>
+    <form style="display:flex; gap:12px; max-width:480px; margin:0 auto; flex-wrap:wrap; justify-content:center;" onsubmit="handleSubmit(event)">
+      <input type="email" id="email-input" placeholder="seu@email.com" required
+        style="flex:1; min-width:240px; padding:14px 20px; border-radius:50px; border:1px solid rgba(255,255,255,0.3);
+        background:rgba(255,255,255,0.12); color:white; font-size:1rem; font-family:inherit; outline:none;">
+      <button type="submit" class="btn btn-light" style="white-space:nowrap;">Quero saber</button>
+    </form>
+    <p id="form-msg" style="margin-top:16px; font-size:0.9rem; display:none;"></p>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <span style="font-weight:600; color:rgba(255,255,255,0.7);">Daily Hero</span>
+        &middot; Tecnologia assistiva para TEA
+      </div>
+      <ul class="footer-links">
+        <li><a href="#problema">O Problema</a></li>
+        <li><a href="#ciencia">Ciencia</a></li>
+        <li><a href="#planos">Planos</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+      </ul>
+      <div>&copy; 2026 Daily Hero. Todos os direitos reservados.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Nav scroll effect
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 20);
+});
+
+// Form handler (placeholder - Guilherme connects to real backend)
+function handleSubmit(e) {
+  e.preventDefault();
+  const email = document.getElementById('email-input').value;
+  const msg = document.getElementById('form-msg');
+  msg.style.display = 'block';
+  msg.textContent = 'Obrigado! Avisaremos quando o Daily Hero estiver disponivel.';
+  document.getElementById('email-input').value = '';
+  // TODO: Guilherme conecta com backend (Supabase, Firebase, ou Formspree)
+  console.log('Waitlist signup:', email);
+}
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+
+</body>
+</html>

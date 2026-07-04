@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Daily Hero – Transformando hábitos em superpoderes</title>
+<meta name="description" content="Daily Hero usa cyberpsicologia e gamificação para democratizar o tratamento de crianças com TEA no Brasil. Acompanhamento em tempo real para pais e terapeutas." />
+<meta property="og:title" content="Daily Hero – Transformando hábitos em superpoderes" />
+<meta property="og:description" content="Cyberpsicologia e gamificação para democratizar o tratamento de crianças com TEA no Brasil." />
+<meta property="og:image" content="4576dbdb-b6e0-49f3-855e-74ebd9b73b5f.jpg" />
+<link rel="icon" type="image/jpeg" href="4576dbdb-b6e0-49f3-855e-74ebd9b73b5f.jpg" />
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:        #2B4BF5;
+    --blue-dark:   #1a35d4;
+    --blue-glow:   rgba(43,75,245,0.12);
+    --bg:          #ffffff;
+    --bg2:         #f5f7ff;
+    --txt:         #0d0d0d;
+    --txt2:        #555555;
+    --txt3:        #999999;
+    --border:      rgba(0,0,0,0.08);
+    --pink:        #FF2D8F;
+    --section-pad: 100px 80px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--txt);
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 60px;
+    gap: 40px;
+    transition: background 0.3s, box-shadow 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .nav-logo {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  nav.scrolled {
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav a {
+    color: var(--txt2);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--txt); }
+  nav a.active { color: var(--txt); font-weight: 800; }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 80px 80px;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(ellipse 60% 80% at 75% 50%, #dce6ff 0%, #fff 65%);
+  }
+
+  .hero-content {
+    flex: 1;
+    max-width: 640px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-label {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--blue);
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 7vw, 92px);
+    line-height: 1.0;
+    color: var(--txt);
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--txt2);
+    max-width: 520px;
+    margin-bottom: 52px;
+    line-height: 1.7;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--blue);
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 20px 64px;
+    border-radius: 60px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); }
+
+  .hero-visual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 500px;
+    z-index: 2;
+  }
+
+  .asterisk-bg {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 460px;
+    height: 460px;
+    animation: spin 40s linear infinite;
+    opacity: 0.15;
+  }
+  @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+  .hero-mascot {
+    position: relative;
+    z-index: 3;
+    width: 380px;
+    height: 420px;
+    object-fit: contain;
+  }
+
+  /* ── PLACEHOLDER ── */
+  .img-placeholder {
+    background: linear-gradient(135deg, #eef1ff, #e4eaff);
+    border: 2px dashed rgba(43,75,245,0.25);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--blue);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    gap: 10px;
+  }
+  .img-placeholder svg { opacity: 0.4; }
+
+  /* ── SEÇÃO GENÉRICA ── */
+  section {
+    padding: var(--section-pad);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── WHO ARE WE ── */
+  #who-are-we {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    background: var(--bg);
+    padding: 100px 80px;
+  }
+  .who-image {
+    flex: 0 0 440px;
+    height: 460px;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .who-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
+  }
+  .who-text { flex: 1; }
+  .who-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4vw, 56px);
+    line-height: 1.1;
+    color: var(--txt);
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
+  .who-body {
+    font-size: 17px;
+    color: var(--txt2);
+    line-height: 1.8;
+  }
+
+  /* ── FOUNDERS ── */
+  #founders {
+    background: var(--bg2);
+    padding: 80px 80px 120px;
+    text-align: center;
+    position: relative;
+  }
+  .puzzle-deco {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    width: 220px;
+    opacity: 0.7;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 6vw, 80px);
+    color: var(--txt);
+    margin-bottom: 64px;
+    letter-spacing: 2px;
+  }
+  .founders-grid {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .founder-card {
+    background: var(--blue);
+    border-radius: 20px;
+    width: 300px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .founder-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(43,75,245,0.3);
+  }
+  .founder-photo {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    border-radius: 14px 14px 0 0;
+  }
+  .founder-info { padding: 20px 24px 28px; }
+  .founder-role {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    text-decoration: underline;
+    margin-bottom: 10px;
+  }
+  .founder-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.5;
+  }
+
+  /* ── LEARNING IN PUBLIC ── */
+  #learning {
+    background: var(--bg);
+    padding: 80px 80px 100px;
+    display: flex;
+    gap: 80px;
+    align-items: flex-start;
+  }
+  .learning-left { flex: 0 0 380px; }
+  .learning-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4vw, 54px);
+    color: var(--txt);
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+  }
+  .learning-body {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--txt2);
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+  .learning-img-small {
+    width: 340px;
+    height: 300px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  }
+  .learning-img-small img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  .learning-right { flex: 1; }
+  .learning-img-large {
+    width: 100%;
+    height: 380px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 32px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  }
+  .learning-img-large img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+  .recognition-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 2.5vw, 30px);
+    color: var(--txt);
+    line-height: 1.2;
+    margin-bottom: 32px;
+    letter-spacing: 0.3px;
+  }
+  .partners-row {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+  .partner-block { display: flex; flex-direction: column; gap: 8px; }
+  .partner-label { font-size: 13px; font-weight: 800; color: var(--txt); letter-spacing: 1px; }
+  .partner-logo {
+    height: 90px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  /* ── ABOUT US ── */
+  #about {
+    background: var(--bg2);
+    padding: 80px 80px 100px;
+    display: flex;
+    align-items: flex-start;
+    gap: 60px;
+  }
+  .about-left { flex: 1; }
+  .about-label {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: var(--pink);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+  .differentials { display: flex; flex-direction: column; gap: 36px; }
+  .diff-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--txt);
+    margin-bottom: 6px;
+  }
+  .diff-body {
+    font-size: 15px;
+    color: var(--txt2);
+    line-height: 1.6;
+  }
+  .about-right {
+    flex: 0 0 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: #fff;
+    padding: 100px 80px 60px;
+    display: flex;
+    align-items: flex-start;
+    gap: 80px;
+  }
+  .contact-left { flex: 1; }
+  .contact-label {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .contact-info { margin-top: 56px; display: flex; flex-direction: column; gap: 40px; }
+  .contact-key {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--blue);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .contact-val {
+    font-size: 16px;
+    color: var(--txt);
+    font-weight: 400;
+  }
+  .social-row { display: flex; gap: 40px; }
+  .social-link {
+    color: var(--txt);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .social-link:hover { color: var(--blue); }
+  .contact-right {
+    flex: 0 0 340px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 32px 80px;
+    text-align: center;
+  }
+  footer p { font-size: 13px; color: var(--txt3); line-height: 1.8; }
+  footer a { color: var(--txt3); text-decoration: underline; }
+  footer a:hover { color: var(--txt); }
+
+  /* ── BROWSER FRAME / APP CARDS ── */
+  .browser-bar {
+    background: #f0f0f0;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 14px 14px 0 0;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot.r { background: #FF5F56; }
+  .dot.y { background: #FFBD2E; }
+  .dot.g { background: #27C93F; }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .app-card {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .app-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 56px rgba(43,75,245,0.12);
+  }
+  .app-card-label {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--txt3);
+    text-align: center;
+    padding: 14px 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: #fafafa;
+  }
+
+  /* ── PROBLEMA ── */
+  .problema-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  .prob-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .prob-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(43,75,245,0.3);
+    box-shadow: 0 8px 32px rgba(43,75,245,0.08);
+  }
+  .prob-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--blue);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .prob-title { font-size: 15px; font-weight: 800; color: var(--txt); margin-bottom: 8px; }
+  .prob-body  { font-size: 13px; color: var(--txt3); line-height: 1.65; }
+
+  /* ── DEPOIMENTOS ── */
+  .test-grid-dh {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .test-card-dh {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .test-card-dh:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(43,75,245,0.08);
+  }
+
+  /* ── PULSE DOT ── */
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(1.4); }
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    :root { --section-pad: 64px 28px; }
+    nav { padding: 16px 28px; gap: 20px; }
+    #home { flex-direction: column; padding: 120px 28px 60px; text-align: center; }
+    .hero-content { max-width: 100%; }
+    .hero-visual { display: none; }
+    #who-are-we { flex-direction: column; padding: 64px 28px; gap: 40px; }
+    .who-image { flex: none; width: 100%; height: 280px; }
+    #founders { padding: 64px 28px 80px; }
+    .puzzle-deco { width: 120px; }
+    #learning { flex-direction: column; padding: 64px 28px; gap: 40px; }
+    .learning-left { flex: none; width: 100%; }
+    .learning-img-small { width: 100%; }
+    .learning-img-large { height: 220px; }
+    #about { flex-direction: column; padding: 64px 28px; }
+    .about-right { display: none; }
+    .app-grid    { grid-template-columns: 1fr; }
+    #app         { padding: 64px 28px; }
+    .problema-grid { grid-template-columns: 1fr; }
+    .test-grid-dh  { grid-template-columns: 1fr; }
+    #waitlist    { padding: 64px 28px; }
+    #depoimentos { padding: 64px 28px; }
+    #problema    { padding: 64px 28px; }
+    #contact { flex-direction: column; padding: 64px 28px; }
+    .contact-right { display: none; }
+    footer { padding: 28px; }
+    nav a { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#home"><img src="4576dbdb-b6e0-49f3-855e-74ebd9b73b5f.jpg" alt="Daily Hero" class="nav-logo" /></a>
+  <div class="nav-links">
+    <a href="#home" class="active">Home</a>
+    <a href="#who-are-we">Who are we?</a>
+    <a href="#founders">Founders</a>
+    <a href="#about">About us</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section id="home" style="display:flex;align-items:center;padding:120px 80px 80px;position:relative;overflow:hidden;background:radial-gradient(ellipse 60% 80% at 75% 50%, #dce6ff 0%, #fff 65%);">
+
+  <div class="hero-content fade-in">
+    <p class="hero-label">Daily Hero</p>
+    <h1 class="hero-title">Grandes heróis começam com pequenos hábitos.</h1>
+    <p class="hero-sub">O Daily Hero transforma a rotina em uma aventura, ajudando crianças, incluindo autistas leves e moderados, a criarem hábitos e evoluírem diariamente.</p>
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <a href="#waitlist" class="btn-primary">Quero ser avisado no lançamento</a>
+      <span style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#999;font-weight:700;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#2B4BF5;display:inline-block;animation:pulse-dot 2s ease-in-out infinite;"></span>
+        Em desenvolvimento
+      </span>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <svg class="asterisk-bg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g transform="translate(200,200)">
+        <rect x="-38" y="-200" width="76" height="400" rx="10" fill="#2B4BF5"/>
+        <rect x="-38" y="-200" width="76" height="400" rx="10" fill="#2B4BF5" transform="rotate(60)"/>
+        <rect x="-38" y="-200" width="76" height="400" rx="10" fill="#2B4BF5" transform="rotate(120)"/>
+      </g>
+    </svg>
+    <!-- <img src="hero-mascot.png" alt="Mascote Daily Hero" style="position:relative;z-index:3;width:380px;object-fit:contain;" /> -->
+  </div>
+</section>
+
+<!-- ══════════════════ PROBLEMA ══════════════════ -->
+<section id="problema" style="background:#f5f7ff;padding:80px 80px;border-top:1px solid rgba(0,0,0,0.06);">
+  <div style="max-width:960px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:56px;" class="fade-in">
+      <p class="hero-label" style="display:block;margin-bottom:16px;">O problema</p>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1.05;color:#0d0d0d;margin-bottom:20px;">Uma criança com TEA tem em média<br>2h de terapia por semana.<br>E as outras 160 horas?</h2>
+      <p style="font-size:17px;color:#555;max-width:620px;margin:0 auto;line-height:1.8;">Entre as sessões, o profissional depende do que a família lembra. A família não tem dados. A criança repete a mesma dificuldade sem que ninguém perceba o padrão.</p>
+    </div>
+    <div class="problema-grid">
+      <div class="fade-in prob-card">
+        <p class="prob-num">2,4M</p>
+        <p class="prob-title">pessoas com TEA no Brasil</p>
+        <p class="prob-body">53,7% são Nível 1, com linguagem funcional, mas alta resistência comportamental e dependência de rotina estruturada. (IBGE, 2022 · DSM-5)</p>
+      </div>
+      <div class="fade-in prob-card" style="transition-delay:.1s">
+        <p class="prob-num">92,4%</p>
+        <p class="prob-title">dos cuidadores são mulheres</p>
+        <p class="prob-body">30,5% sem renda por dedicação integral ao filho. 34,3% sem nenhum apoio de terceiros. Isolamento total, sem qualquer métrica de progresso. (Mapa Autismo Brasil, 2026 · 23.632 entrevistas)</p>
+      </div>
+      <div class="fade-in prob-card" style="transition-delay:.2s">
+        <p class="prob-num">160h</p>
+        <p class="prob-title">por semana sem dado nenhum</p>
+        <p class="prob-body">O profissional planeja a próxima sessão com base em relatos verbais, que 4 de 4 especialistas avaliaram como incompletos para tomada de decisão clínica. (Validação Daily Hero, jun. 2026)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ WHO ARE WE ══════════════════ -->
+<section id="who-are-we" style="display:flex;align-items:center;gap:80px;background:#fff;padding:100px 80px;">
+
+  <img src="criança.jpg" alt="Criança aprendendo" class="who-image fade-in" style="flex:0 0 440px;width:440px;height:460px;object-fit:cover;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.1);" />
+
+  <div class="who-text fade-in" style="flex:1;">
+    <h2 class="who-title">O Daily Hero transforma a rotina doméstica de crianças com TEA em dados clínicos reais, conectando criança, família e profissional num único ciclo contínuo.</h2>
+    <p class="who-body">Desenvolvido para crianças com TEA Nível 1 de 4 a 10 anos, o Daily Hero usa gamificação com intenção clínica para capturar micro-sinais comportamentais de forma passiva, durante a rotina real da criança. O profissional recebe um painel com índices cognitivos gerados automaticamente. A família acompanha sem esforço. A criança joga.</p>
+  </div>
+</section>
+
+<!-- ══════════════════ O APP ══════════════════ -->
+<section id="app" style="background:#f5f7ff;padding:80px 80px;border-top:1px solid rgba(43,75,245,0.1);">
+  <div style="text-align:center;margin-bottom:56px;" class="fade-in">
+    <p class="hero-label" style="display:block;margin-bottom:16px;">O App</p>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1.05;color:#0d0d0d;margin-bottom:20px;">Acompanhamento em tempo real</h2>
+    <p style="font-size:17px;color:#555;max-width:560px;margin:0 auto;line-height:1.8;">Pais e terapeutas visualizam a evolução cognitiva da criança sessão a sessão, tudo em um painel claro e objetivo.</p>
+  </div>
+  <div class="fade-in app-card" style="max-width:860px;margin:0 auto;">
+    <div class="browser-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span style="font-size:11px;color:#aaa;margin-left:10px;">dailyhero.app</span>
+    </div>
+    <img src="Imagem do dash.jpg" alt="Painel de acompanhamento — Daily Hero" style="width:100%;display:block;border-radius:0 0 12px 12px;" />
+    <p class="app-card-label">Painel de acompanhamento cognitivo</p>
+  </div>
+</section>
+
+<!-- ══════════════════ FOUNDERS ══════════════════ -->
+<section id="founders" style="background:#fff;padding:80px 80px 120px;text-align:center;position:relative;">
+
+  <svg class="puzzle-deco" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M20 20 L160 20 Q140 50 160 80 L160 160 Q130 145 100 160 Q115 130 100 100 L20 100 Q35 70 20 40 Z" fill="#2B4BF5"/>
+    <circle cx="110" cy="60" r="22" fill="#fff"/>
+  </svg>
+
+  <h2 class="section-title fade-in">Founder</h2>
+
+  <div class="founders-grid">
+    <div class="founder-card fade-in">
+      <img src="founder.png" alt="Guilherme — Founder" class="founder-photo" />
+      <div class="founder-info">
+        <p style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px;">Guilherme Pereira</p>
+        <p class="founder-role">General Manager</p>
+        <p class="founder-desc">Engineering, strategic positioning and project management</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ LEARNING IN PUBLIC ══════════════════ -->
+<section id="learning" style="background:#f5f7ff;padding:80px 80px 100px;display:flex;gap:80px;align-items:flex-start;border-top:1px solid rgba(0,0,0,0.06);">
+
+  <div class="learning-left fade-in">
+    <h2 class="learning-title">building in public</h2>
+    <p class="learning-body">Não construímos o Daily Hero em segredo para revelar só no lançamento. Compartilhamos o progresso abertamente, acertos, erros, decisões, métricas e aprendizados. Quem acompanha o projeto faz parte do processo. É assim que construímos com as pessoas certas do lado certo.</p>
+    <div class="learning-img-small">
+      <img src="evento-pequeno.png" alt="Evento" />
+    </div>
+  </div>
+
+  <div class="learning-right fade-in">
+    <div class="learning-img-large">
+      <img src="evento-grande.png" alt="Evento principal" />
+    </div>
+
+    <p class="recognition-text">Somos reconhecidos por uma das 10 melhores escolas executivas do mundo e em meio a 22 mil jovens aprendizes, conseguimos o nosso destaque</p>
+
+    <div class="partners-row">
+      <div class="partner-block">
+        <span class="partner-label">Fundação Dom Cabral</span>
+        <img src="logo-fdc.png" alt="Fundação Dom Cabral" class="partner-logo"/>
+      </div>
+      <div class="partner-block">
+        <span class="partner-label">Espro</span>
+        <img src="1_positivo_assinatura.png" alt="Espro" class="partner-logo"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ ABOUT US ══════════════════ -->
+<section id="about" style="background:#fff;padding:80px 80px 100px;display:flex;align-items:flex-start;gap:60px;">
+
+  <div class="about-left fade-in">
+    <p class="about-label">Por que o Daily Hero?</p>
+    <div class="differentials">
+      <div class="diff-item">
+        <p class="diff-title">O único que une todos os elos</p>
+        <p class="diff-body">Analisamos 8 plataformas concorrentes. Nenhuma combina os 5 pilares ao mesmo tempo: interface para a criança, gamificação narrativa, rotina doméstica, dados clínicos e ponte direta casa-clínica. O Daily Hero é o único.</p>
+      </div>
+      <div class="diff-item">
+        <p class="diff-title">Dado ecológico, não relato verbal</p>
+        <p class="diff-body">Profissionais dependem do que a família lembra. O Daily Hero gera dados comportamentais automaticamente, durante a rotina real da criança, sem formulários, sem esforço, sem o filtro da memória.</p>
+      </div>
+      <div class="diff-item">
+        <p class="diff-title">Fenotipagem comportamental contínua</p>
+        <p class="diff-body">Cada missão captura micro-sinais de forma passiva: latência, taxa de erro, padrão de toque, abandono. Esses sinais se transformam em índices clínicos, atenção, flexibilidade, autonomia, que antes simplesmente não existiam.</p>
+      </div>
+      <div class="diff-item">
+        <p class="diff-title">Base científica em 7 frameworks clínicos</p>
+        <p class="diff-body">Cada mecânica do jogo tem correspondência direta com literatura revisada por pares: ABA, TEACCH, DIR/Floortime, PECS, ESDM, Teoria Polivagal e Evidence-Centered Design. 21 referências científicas verificadas.</p>
+      </div>
+      <div class="diff-item">
+        <p class="diff-title">Protocolo de crise sempre gratuito</p>
+        <p class="diff-body">Famílias em situação de crise não pagam nada. O check-in emocional e o protocolo de crise são permanentemente gratuitos, porque dados da criança não são o produto. Nunca serão.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-right fade-in">
+    <div style="width:480px;height:540px;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.1);flex-shrink:0;">
+      <img src="criançabrincandotea.jpg" alt="Criança brincando" style="width:100%;height:100%;object-fit:cover;object-position:center top;" />
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ VALIDAÇÃO ══════════════════ -->
+<section id="depoimentos" style="background:#f5f7ff;padding:80px 80px;border-top:1px solid rgba(0,0,0,0.06);">
+  <div style="text-align:center;margin-bottom:56px;" class="fade-in">
+    <p class="hero-label" style="display:block;margin-bottom:16px;">Validação de campo</p>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,64px);line-height:1.05;color:#0d0d0d;margin-bottom:20px;">Validado com profissionais reais, <br>antes de qualquer usuário final</h2>
+    <p style="font-size:17px;color:#555;max-width:580px;margin:0 auto;line-height:1.8;">Antes de lançar para famílias, validamos o conceito e o protótipo com especialistas em TEA de Colatina/ES, com experiência combinada de 18 anos em atendimento clínico.</p>
+  </div>
+
+  <!-- Métricas principais -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:860px;margin:0 auto 48px;">
+    <div class="fade-in test-card-dh" style="text-align:center;">
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#2B4BF5;line-height:1;margin-bottom:8px;">100%</p>
+      <p style="font-size:15px;font-weight:800;color:#0d0d0d;margin-bottom:6px;">recomendariam a colegas</p>
+      <p style="font-size:13px;color:#aaa;">Todos os profissionais indicariam o Daily Hero a outros especialistas da área</p>
+    </div>
+    <div class="fade-in test-card-dh" style="text-align:center;transition-delay:.1s;">
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#2B4BF5;line-height:1;margin-bottom:8px;">4,7<span style="font-size:40px;">/5</span></p>
+      <p style="font-size:15px;font-weight:800;color:#0d0d0d;margin-bottom:6px;">integração clínica</p>
+      <p style="font-size:13px;color:#aaa;">Nota média atribuída à utilidade clínica do Daily Hero no contexto real de atendimento</p>
+    </div>
+    <div class="fade-in test-card-dh" style="text-align:center;transition-delay:.2s;">
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#2B4BF5;line-height:1;margin-bottom:8px;">~60</p>
+      <p style="font-size:15px;font-weight:800;color:#0d0d0d;margin-bottom:6px;">crianças representadas</p>
+      <p style="font-size:13px;color:#aaa;">Base total de atendimento dos 4 profissionais validadores, TEA Nível 1 e 2</p>
+    </div>
+  </div>
+
+  <!-- Contexto da validação -->
+  <div class="fade-in test-card-dh" style="max-width:760px;margin:0 auto;text-align:center;padding:36px 40px;">
+    <p style="font-size:18px;font-weight:800;color:#0d0d0d;margin-bottom:16px;line-height:1.4;">Validado com profissionais de saúde especializados em TEA, antes de qualquer usuário final.</p>
+    <p style="font-size:15px;color:#555;line-height:1.8;margin-bottom:24px;">A pesquisa envolveu especialistas com anos de experiência clínica no atendimento de crianças com Transtorno do Espectro Autista. O feedback foi incorporado diretamente ao design do produto, desde a interface até a forma como os dados são apresentados para famílias e profissionais.</p>
+    <p style="font-size:13px;color:#bbb;">Pesquisa de validação realizada em jun. 2026</p>
+  </div>
+</section>
+
+<!-- ══════════════════ BETA CTA ══════════════════ -->
+<section id="waitlist" style="background:linear-gradient(160deg,#eef1ff 0%,#fff 60%);padding:100px 80px;text-align:center;border-top:1px solid rgba(43,75,245,0.12);">
+  <div class="fade-in" style="max-width:620px;margin:0 auto;">
+    <span style="display:inline-block;background:rgba(43,75,245,0.08);border:1px solid rgba(43,75,245,0.2);color:#2B4BF5;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:6px 18px;border-radius:99px;margin-bottom:28px;">Versão Beta — Vagas limitadas</span>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,68px);line-height:1.05;color:#0d0d0d;margin-bottom:20px;">Quero participar da versão Beta do Daily Hero</h2>
+    <p style="font-size:17px;color:#777;margin-bottom:40px;line-height:1.7;">Estamos selecionando profissionais de saúde e famílias para o beta fechado. Preencha abaixo e entraremos em contato quando as vagas abrirem.</p>
+
+    <form id="beta-form" onsubmit="handleBeta(event)" style="display:flex;flex-direction:column;gap:14px;max-width:480px;margin:0 auto 16px;">
+      <input type="text" id="beta-nome" placeholder="Seu nome completo" required
+        style="background:#fff;border:1.5px solid rgba(0,0,0,0.15);border-radius:60px;padding:16px 22px;color:#0d0d0d;font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;width:100%;"
+        onfocus="this.style.borderColor='#2B4BF5'" onblur="this.style.borderColor='rgba(0,0,0,0.15)'" />
+      <input type="email" id="beta-email" placeholder="Seu melhor e-mail" required
+        style="background:#fff;border:1.5px solid rgba(0,0,0,0.15);border-radius:60px;padding:16px 22px;color:#0d0d0d;font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;width:100%;"
+        onfocus="this.style.borderColor='#2B4BF5'" onblur="this.style.borderColor='rgba(0,0,0,0.15)'" />
+      <input type="tel" id="beta-whatsapp" placeholder="WhatsApp (com DDD)" required
+        style="background:#fff;border:1.5px solid rgba(0,0,0,0.15);border-radius:60px;padding:16px 22px;color:#0d0d0d;font-family:'Nunito',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;width:100%;"
+        onfocus="this.style.borderColor='#2B4BF5'" onblur="this.style.borderColor='rgba(0,0,0,0.15)'" />
+      <button type="submit" class="btn-primary" style="padding:18px 32px;font-size:15px;border-radius:60px;cursor:pointer;width:100%;">Tenho interesse em testar o Daily Hero</button>
+    </form>
+
+    <div id="beta-success" style="display:none;background:rgba(43,75,245,0.06);border:1px solid rgba(43,75,245,0.2);border-radius:16px;padding:28px 24px;margin-top:8px;">
+      <p style="font-size:28px;margin-bottom:12px;">✓</p>
+      <p style="font-size:17px;font-weight:800;color:#0d0d0d;margin-bottom:8px;">Interesse registrado com sucesso!</p>
+      <p style="font-size:15px;color:#555;line-height:1.7;">Entraremos em contato pelo e-mail e WhatsApp informados assim que o Beta estiver disponível. Obrigado por acreditar no Daily Hero.</p>
+    </div>
+
+    <p style="font-size:12px;color:#bbb;margin-top:20px;">Seus dados não serão compartilhados com terceiros. Conforme a LGPD (Lei nº 13.709/2018).</p>
+  </div>
+</section>
+
+<!-- ══════════════════ CONTACT ══════════════════ -->
+<section id="contact" style="background:#fff;padding:100px 80px 60px;display:flex;align-items:flex-start;gap:80px;">
+
+  <div class="contact-left fade-in">
+    <p class="contact-label">Seja nosso parceiro nessa jornada</p>
+    <a href="mailto:hello@dailyhero.com.br" class="btn-primary">Contact us</a>
+
+    <div class="contact-info">
+      <div class="contact-block">
+        <p class="contact-key">Email</p>
+        <p class="contact-val"><a href="mailto:hello@dailyhero.com.br" style="color:inherit;text-decoration:none;">hello@dailyhero.com.br</a></p>
+      </div>
+      <div class="contact-block">
+        <p class="contact-key">Social</p>
+        <div class="social-row">
+          <a href="https://www.instagram.com/odailyhero/" target="_blank" class="social-link">Instagram</a>
+          <a href="https://www.linkedin.com/in/gui-castro-971731336/" target="_blank" class="social-link">LinkedIn</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-right fade-in">
+    <img src="58399c5a-6a28-4efe-90dc-6fade0f9e3a5.jpg" alt="Daily Hero" style="flex:0 0 480px;width:480px;object-fit:contain;align-self:flex-end;" />
+  </div>
+</section>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer>
+  <p>Daily Hero © 2026 – Tecnologia assistiva que transforma rotina em dado clínico para crianças com TEA.</p>
+  <p>Todos os direitos reservados.</p>
+  <p style="margin-top:6px;"><a href="#">Termos e condições</a> &nbsp;|&nbsp; <a href="#">Política de Privacidade</a></p>
+  <p style="margin-top:10px;font-size:11px;color:#bbb;">Este site está em conformidade com a LGPD (Lei nº 13.709/2018). Seus dados são tratados com segurança e nunca compartilhados com terceiros.</p>
+</footer>
+
+<script>
+  // ── Google Apps Script URL ──
+  // SETUP: Cole aqui a URL do seu Apps Script depois de criar a planilha.
+  // Passos: script.google.com → Novo projeto → cole o código abaixo → Implantar → App da Web → Copiar URL
+  //
+  // Código do Apps Script:
+  // function doPost(e) {
+  //   var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  //   var data = JSON.parse(e.postData.contents);
+  //   sheet.appendRow([new Date(), data.nome, data.email, data.whatsapp]);
+  //   return ContentService.createTextOutput(JSON.stringify({status:'ok'})).setMimeType(ContentService.MimeType.JSON);
+  // }
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzP2CmbvIaTQ2M21oh0j726eXEpgBf7VSPioVm2e8n3AxEoO777mceog01kXqGljjuYlg/exec';
+
+  async function handleBeta(e) {
+    e.preventDefault();
+    var btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    var payload = {
+      nome: document.getElementById('beta-nome').value,
+      email: document.getElementById('beta-email').value,
+      whatsapp: document.getElementById('beta-whatsapp').value
+    };
+
+    try {
+      if (APPS_SCRIPT_URL !== 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      }
+    } catch(err) { /* silencioso — no-cors não permite ler resposta */ }
+
+    document.getElementById('beta-form').style.display = 'none';
+    document.getElementById('beta-success').style.display = 'block';
+  }
+
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const navLinks = document.querySelectorAll('nav a');
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('section[id]').forEach(s => sectionObserver.observe(s));
+
+  const fadeObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObs.observe(el));
+</script>
+</body>
+</html>

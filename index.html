@@ -571,30 +571,44 @@
   @media (max-width: 900px) {
     :root { --section-pad: 64px 28px; }
     nav { padding: 16px 28px; gap: 20px; }
-    #home { flex-direction: column; padding: 120px 28px 60px; text-align: center; }
+    nav a { font-size: 13px; }
+
+    #home { flex-direction: column; padding: 120px 28px 60px !important; text-align: center; }
     .hero-content { max-width: 100%; }
     .hero-visual { display: none; }
-    #who-are-we { flex-direction: column; padding: 64px 28px; gap: 40px; }
+
+    #who-are-we { flex-direction: column; padding: 64px 28px !important; gap: 40px; }
     .who-image { flex: none; width: 100%; height: 280px; }
-    #founders { padding: 64px 28px 80px; }
+
+    #founders { padding: 64px 28px 80px !important; }
     .puzzle-deco { width: 120px; }
-    #learning { flex-direction: column; padding: 64px 28px; gap: 40px; }
+
+    #learning { flex-direction: column; padding: 64px 28px !important; gap: 40px; }
     .learning-left { flex: none; width: 100%; }
     .learning-img-small { width: 100%; }
     .learning-img-large { height: 220px; }
-    #about { flex-direction: column; padding: 64px 28px; }
+
+    #about { flex-direction: column; padding: 64px 28px !important; }
     .about-right { display: none; }
-    .app-grid    { grid-template-columns: 1fr; }
-    #app         { padding: 64px 28px; }
+
+    #app { padding: 64px 28px !important; }
+    .app-grid { grid-template-columns: 1fr; }
+
+    #problema { padding: 64px 28px !important; }
     .problema-grid { grid-template-columns: 1fr; }
-    .test-grid-dh  { grid-template-columns: 1fr; }
-    #waitlist    { padding: 64px 28px; }
-    #depoimentos { padding: 64px 28px; }
-    #problema    { padding: 64px 28px; }
-    #contact { flex-direction: column; padding: 64px 28px; }
+
+    #depoimentos { padding: 64px 28px !important; }
+    .test-grid-dh { grid-template-columns: 1fr; }
+    .validation-metrics { grid-template-columns: 1fr !important; }
+    .validation-context { padding: 28px 20px !important; }
+
+    #waitlist { padding: 64px 28px !important; }
+    #waitlist form { flex-direction: column; }
+
+    #contact { flex-direction: column; padding: 64px 28px !important; }
     .contact-right { display: none; }
+
     footer { padding: 28px; }
-    nav a { font-size: 13px; }
   }
 </style>
 </head>
@@ -794,7 +808,7 @@
   </div>
 
   <!-- Métricas principais -->
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:860px;margin:0 auto 48px;">
+  <div class="validation-metrics" style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:860px;margin:0 auto 48px;">
     <div class="fade-in test-card-dh" style="text-align:center;">
       <p style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:#2B4BF5;line-height:1;margin-bottom:8px;">100%</p>
       <p style="font-size:15px;font-weight:800;color:#0d0d0d;margin-bottom:6px;">recomendariam a colegas</p>
@@ -813,7 +827,7 @@
   </div>
 
   <!-- Contexto da validação -->
-  <div class="fade-in test-card-dh" style="max-width:760px;margin:0 auto;text-align:center;padding:36px 40px;">
+  <div class="fade-in test-card-dh validation-context" style="max-width:760px;margin:0 auto;text-align:center;padding:36px 40px;">
     <p style="font-size:18px;font-weight:800;color:#0d0d0d;margin-bottom:16px;line-height:1.4;">Validado com profissionais de saúde especializados em TEA, antes de qualquer usuário final.</p>
     <p style="font-size:15px;color:#555;line-height:1.8;margin-bottom:24px;">A pesquisa envolveu especialistas com anos de experiência clínica no atendimento de crianças com Transtorno do Espectro Autista. O feedback foi incorporado diretamente ao design do produto, desde a interface até a forma como os dados são apresentados para famílias e profissionais.</p>
     <p style="font-size:13px;color:#bbb;">Pesquisa de validação realizada em jun. 2026</p>
